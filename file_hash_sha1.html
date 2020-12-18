@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Calculate File SHA1 hash - client side</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+</head>
+<body>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha1-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/lib-typedarrays-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+
+<h3>Calculate SHA1 of a file client side</h3>
+<p>This demo uses: CryptoJS and Javascript File and FileReader API</p>
+
+Step 1: Select a file<br>
+<input type="file" id="f1"><br><br>
+
+Step 2: click to calculate<br>
+<input type="button" id="btn" value="calculate hash" />
+
+ 
+<script>
+$(document).ready(function () {
+    $("#btn").click(function () {
+        var reader = new FileReader(); //define a Reader
+        var file = $("#f1")[0].files[0]; //get the File object 
+        if (!file) {
+            alert("no file selected");
+            return;
+        } //check if user selected a file
+
+        reader.onload = function (f) {
+            var file_result = this.result; // this == reader, get the loaded file "result"
+            var file_wordArr = CryptoJS.lib.WordArray.create(file_result); //convert blob to WordArray , see https://code.google.com/p/crypto-js/issues/detail?id=67
+            var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
+            alert("Calculated SHA1:" + sha1_hash.toString()); //output result
+        };
+        reader.readAsArrayBuffer(file); //read file as ArrayBuffer
+    });
+});
+</script>
+ 
+</body>
+</html>
